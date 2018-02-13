@@ -41,6 +41,7 @@ class EntityDamageEvent extends EntityEvent implements Cancellable{
     const MODIFIER_WEAKNESS = 5;
     const MODIFIER_ABSORPTION = 5;
     const MODIFIER_ARMOR_ENCHANTMENTS = 6;
+    const MODIFIER_CRITICAL = 7;
 
     const CAUSE_CONTACT = 0;
     const CAUSE_ENTITY_ATTACK = 1;
