@@ -1649,7 +1649,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
         return false;
     }
 
-    protected function updateMovement(){
     protected function updateMovement(bool $teleport = false){
  
 
