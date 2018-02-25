@@ -245,6 +245,14 @@ abstract class Living extends Entity implements Damageable{
     }
 
     /**
+     * Returns whether the mob has any active effects.
+     * @return bool
+     */
+    public function hasEffects() : bool{
+	    return !empty($this->effects);
+    }
+
+    /**
      * Adds an effect to the mob.
      * If a weaker effect of the same type is already applied, it will be replaced.
      * If a weaker or equal-strength effect is already applied but has a shorter duration, it will be replaced.
