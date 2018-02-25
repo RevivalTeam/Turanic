@@ -74,7 +74,7 @@ class Painting extends Hanging {
         $player->dataPacket($pk);
     }
 
-    protected function updateMovement(){
+    protected function updateMovement(bool $teleport = false){
 		//Nothing to update, paintings cannot move.
 	}
 
