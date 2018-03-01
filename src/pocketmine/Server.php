@@ -924,6 +924,16 @@ class Server{
 		return $matchedPlayers;
 	}
 
+	/**
+	 * @param Player $player
+	 */
+	public function removePlayer(Player $player){
+		if(isset($this->identifiers[$hash = spl_object_hash($player)])){
+			$identifier = $this->identifiers[$hash];
+			unset($this->players[$identifier]);
+			unset($this->identifiers[$hash]);
+			return;
+		}
 
 		foreach($this->players as $identifier => $p){
 			if($player === $p){
@@ -2347,8 +2357,10 @@ class Server{
 
 		$errstr = $e->getMessage();
 		$errfile = $e->getFile();
+		$errno = $e->getCode();
 		$errline = $e->getLine();
 
+		$type = ($errno === E_ERROR or $errno === E_USER_ERROR) ? \LogLevel::ERROR : (($errno === E_USER_WARNING or $errno === E_WARNING) ? \LogLevel::WARNING : \LogLevel::NOTICE);
 		if(($pos = strpos($errstr, "\n")) !== false){
 			$errstr = substr($errstr, 0, $pos);
 		}
@@ -2360,7 +2372,7 @@ class Server{
 		}
 
 		$lastError = [
-			"type" => \get_class($e),
+			"type" => $type,
 			"message" => $errstr,
 			"fullFile" => $e->getFile(),
 			"file" => $errfile,
@@ -2420,6 +2432,9 @@ class Server{
 		$this->loggedInPlayers[$player->getRawUniqueId()] = $player;
 	}
 
+	public function onPlayerCompleteLoginSequence(Player $player){
+		$this->sendFullPlayerListData($player);
+		$player->dataPacket($this->craftingManager->getCraftingDataPacket());
 	}
 
 	public function onPlayerLogout(Player $player){
@@ -2429,13 +2444,6 @@ class Server{
 	public function addPlayer($identifier, Player $player){
 		$this->players[$identifier] = $player;
 		$this->identifiers[spl_object_hash($player)] = $identifier;
-	}
-
-    /**
-     * @param Player $player
-     */
-    public function removePlayer(Player $player){
-	    unset($this->players[spl_object_hash($player)]);
 	}
 
 	public function addOnlinePlayer(Player $player){
