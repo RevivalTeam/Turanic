@@ -546,7 +546,6 @@ abstract class Entity extends Location implements Metadatable, EntityIds {
 
     /** @var \pocketmine\event\TimingsHandler */
 	protected $timings;
-	protected $isPlayer = false;
 
 	/** @var Entity */
 	protected $linkedEntity = null;
