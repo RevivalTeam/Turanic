@@ -924,16 +924,6 @@ class Server{
 		return $matchedPlayers;
 	}
 
-	/**
-	 * @param Player $player
-	 */
-	public function removePlayer(Player $player){
-		if(isset($this->identifiers[$hash = spl_object_hash($player)])){
-			$identifier = $this->identifiers[$hash];
-			unset($this->players[$identifier]);
-			unset($this->identifiers[$hash]);
-			return;
-		}
 
 		foreach($this->players as $identifier => $p){
 			if($player === $p){
@@ -2430,9 +2420,6 @@ class Server{
 		$this->loggedInPlayers[$player->getRawUniqueId()] = $player;
 	}
 
-	public function onPlayerCompleteLoginSequence(Player $player){
-		$this->sendFullPlayerListData($player);
-		$player->dataPacket($this->craftingManager->getCraftingDataPacket());
 	}
 
 	public function onPlayerLogout(Player $player){
@@ -2442,6 +2429,13 @@ class Server{
 	public function addPlayer($identifier, Player $player){
 		$this->players[$identifier] = $player;
 		$this->identifiers[spl_object_hash($player)] = $identifier;
+	}
+
+    /**
+     * @param Player $player
+     */
+    public function removePlayer(Player $player){
+	    unset($this->players[spl_object_hash($player)]);
 	}
 
 	public function addOnlinePlayer(Player $player){
