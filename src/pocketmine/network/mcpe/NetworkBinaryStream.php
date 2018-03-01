@@ -412,7 +412,7 @@ class NetworkBinaryStream extends BinaryStream{
      * Reads gamerules
      * TODO: implement this properly
      *
-     * @return array
+     * @return array, members are in the structure [name => [type, value]]
      */
     public function getGameRules() : array{
         $count = $this->getUnsignedVarInt();
@@ -440,7 +440,7 @@ class NetworkBinaryStream extends BinaryStream{
     }
 
     /**
-     * Writes a gamerule array
+     * Writes a gamerule array, members are in the structure [name => [type, value]]
      * TODO: implement this properly
      *
      * @param array $rules
