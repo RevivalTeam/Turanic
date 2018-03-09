@@ -27,7 +27,7 @@ namespace pocketmine\item;
 use pocketmine\entity\Entity;
 use pocketmine\entity\projectile\Projectile;
 use pocketmine\event\entity\ProjectileLaunchEvent;
-use pocketmine\level\sound\LaunchSound;
+use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
