@@ -59,6 +59,8 @@ class EntityEventPacket extends DataPacket{
     const AGENT_ARM_SWING = 36;
     const ENDER_DRAGON_DEATH = 37;
     const DUST_PARTICLES = 38; //not sure what this is
+    const ARROW_SHAKE = 39;
+
     const EATING_ITEM = 57;
     const BABY_ANIMAL_FEED = 60; //green particles, like bonemeal on crops
     const DEATH_SMOKE_CLOUD = 61;
