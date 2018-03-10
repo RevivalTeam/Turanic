@@ -27,6 +27,7 @@ namespace pocketmine\inventory;
 use pocketmine\entity\Living;
 use pocketmine\event\entity\EntityArmorChangeEvent;
 use pocketmine\item\Item;
+use pocketmine\network\mcpe\protocol\InventoryContentPacket;
 use pocketmine\network\mcpe\protocol\InventorySlotPacket;
 use pocketmine\network\mcpe\protocol\MobArmorEquipmentPacket;
 use pocketmine\Player;
@@ -126,7 +127,13 @@ class ArmorInventory extends BaseInventory{
                 $pk2->item = $this->getItem($index);
                 $player->dataPacket($pk2);
             }else{
-                $player->dataPacket($pk);
+			if($player === $this->getHolder()){
+				$pk2 = new InventoryContentPacket();
+				$pk2->windowId = $player->getWindowId($this);
+				$pk2->items = $armor;
+				$player->dataPacket($pk2);
+			}else{
+				$player->dataPacket($pk);
             }
         }
     }
