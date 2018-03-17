@@ -1,14 +1,14 @@
 <?php
 
 /*
- *
- *    _______                    _
- *   |__   __|                  (_)
- *      | |_   _ _ __ __ _ _ __  _  ___
- *      | | | | | '__/ _` | '_ \| |/ __|
- *      | | |_| | | | (_| | | | | | (__
- *      |_|\__,_|_|  \__,_|_| |_|_|\___|
- *
+ *               _ _
+ *         /\   | | |
+ *        /  \  | | |_ __ _ _   _
+ *       / /\ \ | | __/ _` | | | |
+ *      / ____ \| | || (_| | |_| |
+ *     /_/    \_|_|\__\__,_|\__, |
+ *                           __/ |
+ *                          |___/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,7 +16,7 @@
  * (at your option) any later version.
  *
  * @author TuranicTeam
- * @link https://github.com/TuranicTeam/Turanic
+ * @link https://github.com/TuranicTeam/Altay
  *
  */
 
@@ -26,13 +26,16 @@ namespace pocketmine\block;
 
 use pocketmine\block\utils\ColorBlockMetaHelper;
 
-// TODO : UPDATE
-class ConcretePowder extends Fallable {
+class ConcretePowder extends Fallable{
 
 	protected $id = self::CONCRETE_POWDER;
 
 	public function __construct(int $meta = 0){
 		$this->meta = $meta;
+	}
+
+	public function getName() : string{
+		return ColorBlockMetaHelper::getColorFromMeta($this->meta) . " Concrete Powder";
 	}
 
 	public function getHardness() : float{
@@ -43,8 +46,31 @@ class ConcretePowder extends Fallable {
 		return BlockToolType::TYPE_SHOVEL;
 	}
 
-    public function getName() : string{
-        return ColorBlockMetaHelper::getColorFromMeta($this->meta) . " Concrete Powder";
-    }
+	public function onNearbyBlockChange() : void{
+		if(($block = $this->checkAdjacentWater()) !== null){
+			$this->level->setBlock($this, $block);
+		}else{
+		    parent::onNearbyBlockChange();
+		}
+	}
 
+	/**
+	 * @return null|Block
+	 */
+	public function tickFalling() : Block{
+		return $this->checkAdjacentWater();
+	}
+
+	/**
+	 * @return null|Block
+	 */
+	private function checkAdjacentWater() : Block{
+		for($i = 1; $i < 6; ++$i){ //Do not check underneath
+			if($this->getSide($i) instanceof Water){
+				return Block::get(Block::CONCRETE, $this->meta);
+			}
+		}
+
+		return null;
+	}
 }
