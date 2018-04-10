@@ -49,9 +49,10 @@ class Skin{
 		return (
 			$this->skinId !== "" and
 			(($s = strlen($this->skinData)) === 16384 or $s === 8192) and
-			($this->capeData === "" or strlen($this->capeData) === 8192)
-		);
-	}
+			($this->capeData === "" or strlen($this->capeData) === 8192 or $s === 65536)
+	) ;
+             }
+
 
 	/**
 	 * @return string
