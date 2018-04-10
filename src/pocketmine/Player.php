@@ -2756,7 +2756,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
                 break;
             case PlayerActionPacket::ACTION_CONTINUE_BREAK:
                 $block = $this->level->getBlockAt(...$pos->toArray());
-                $this->level->broadcastLevelEvent($pos, LevelEventPacket::EVENT_PARTICLE_PUNCH_BLOCK, $block->getId() | ($block->getDamage() << 8) | ($packet->face << 16));
+				$this->level->broadcastLevelEvent($pos, LevelEventPacket::EVENT_PARTICLE_PUNCH_BLOCK, BlockFactory::toStaticRuntimeId($block->getId(), $block->getDamage()) | ($packet->face << 24));
+				//TODO: destroy-progress level event
                 break;
             case PlayerActionPacket::ACTION_SET_ENCHANTMENT_SEED:
                 // TODO : Add Event
@@ -3323,7 +3324,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
     public function sendWhisper(string $sender, string $message){
         $pk = new TextPacket();
         $pk->type = TextPacket::TYPE_WHISPER;
-        $pk->source = $sender;
+        $pk->sourceName = $sender;
         $pk->message = $message;
         $this->dataPacket($pk);
     }
