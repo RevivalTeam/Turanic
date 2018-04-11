@@ -26,6 +26,8 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\level\Position;
+use pocketmine\utils\MainLogger;
+
 
 class BlockFactory extends Block {
     /** @var \SplFixedArray<Block> */
@@ -47,6 +49,15 @@ class BlockFactory extends Block {
     public static $diffusesSkyLight = null;
     /** @var \SplFixedArray<float> */
     public static $blastResistance = null;
+	/** @var int[] */
+	public static $staticRuntimeIdMap = [];
+
+	/** @var int[] */
+	public static $legacyIdMap = [];
+
+	/** @var int */
+	private static $lastRuntimeId = 0;
+
 
     /**
      * Initializes the block factory. By default this is called only once on server start, however you may wish to use
