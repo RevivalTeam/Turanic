@@ -313,6 +313,44 @@ class BlockFactory extends Block {
         }
     }
 
+
+	/**
+	 * @internal
+	 *
+	 * @param int $id
+	 * @param int $meta
+	 *
+	 * @return int
+	 */
+	public static function toStaticRuntimeId(int $id, int $meta = 0) : int{
+		$index = ($id << 4) | $meta;
+		if(!isset(self::$staticRuntimeIdMap[$index])){
+			self::registerMapping($rtId = ++self::$lastRuntimeId, $id, $meta);
+			MainLogger::getLogger()->error("ID $id meta $meta does not have a corresponding block static runtime ID, added a new unknown runtime ID ($rtId)");
+			return $rtId;
+		}
+
+		return self::$staticRuntimeIdMap[$index];
+	}
+
+	/**
+	 * @internal
+	 *
+	 * @param int $runtimeId
+	 *
+	 * @return int[] [id, meta]
+	 */
+	public static function fromStaticRuntimeId(int $runtimeId) : array{
+		$v = self::$legacyIdMap[$runtimeId];
+		return [$v >> 4, $v & 0xf];
+	}
+
+	private static function registerMapping(int $staticRuntimeId, int $legacyId, int $legacyMeta) : void{
+		self::$staticRuntimeIdMap[($legacyId << 4) | $legacyMeta] = $staticRuntimeId;
+		self::$legacyIdMap[$staticRuntimeId] = ($legacyId << 4) | $legacyMeta;
+		self::$lastRuntimeId = max(self::$lastRuntimeId, $staticRuntimeId);
+	}
+
     /**
      * Registers a block type into the index. Plugins may use this method to register new block types or override
      * existing ones.
