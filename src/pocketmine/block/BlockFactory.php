@@ -334,11 +334,23 @@ class BlockFactory extends Block {
 	 * @return int
 	 */
 	public static function toStaticRuntimeId(int $id, int $meta = 0) : int{
+		if($id === Block::AIR){
+			//TODO: HACK! (weird air blocks with non-zero damage values shouldn't turn into update! blocks)
+			$meta = 0;
+		}
+
 		$index = ($id << 4) | $meta;
 		if(!isset(self::$staticRuntimeIdMap[$index])){
 			self::registerMapping($rtId = ++self::$lastRuntimeId, $id, $meta);
 			MainLogger::getLogger()->error("ID $id meta $meta does not have a corresponding block static runtime ID, added a new unknown runtime ID ($rtId)");
 			return $rtId;
+		}
+
+
+		/** @var mixed[] $runtimeIdMap */
+		$runtimeIdMap = json_decode(file_get_contents(\pocketmine\RESOURCE_PATH . "runtimeid_table.json"), true);
+		foreach($runtimeIdMap as $obj){
+			self::registerMapping($obj["runtimeID"], $obj["id"], $obj["data"]);
 		}
 
 		return self::$staticRuntimeIdMap[$index];
