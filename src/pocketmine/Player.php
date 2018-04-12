@@ -3002,7 +3002,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
      * @param DataPacket $packet
      * @return bool
      */
-    public function handleDataPacket(DataPacket $packet) : bool{
+    public function handleDataPacket(DataPacket $packet){
         if (!$this->connected) {
             return false;
         }
