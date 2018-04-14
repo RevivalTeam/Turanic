@@ -54,9 +54,9 @@ class Human extends Creature implements ProjectileSource, InventoryHolder {
 	const DATA_PLAYER_FLAG_SLEEP = 1;
 	const DATA_PLAYER_FLAG_DEAD = 2; //TODO: CHECK
 
-	const DATA_PLAYER_FLAGS = 27;
+	const DATA_PLAYER_FLAGS = 26;
 
-	const DATA_PLAYER_BED_POSITION = 29;
+	const DATA_PLAYER_BED_POSITION = 28;
 
 	/** @var PlayerInventory */
 	protected $inventory;
@@ -102,8 +102,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder {
      * @return bool
      */
     public static function isValidSkin(string $skin) : bool{
-        return strlen($skin) === 64 * 64 * 4 or strlen($skin) === 64 * 32 * 4;
-    }
+		$len = strlen($skin);		return $len === 64 * 64 * 4 or $len === 64 * 32 * 4 or $len === 128 * 128 * 4;
+ 	}
 
     /**
      * @return UUID|null

@@ -34,12 +34,6 @@ class PlayerListEntry{
 	public $entityUniqueId;
 	/** @var string */
 	public $username;
-	/** @var string */
-	public $thirdPartyName = "";
-	/** @var int */
-	public $platform = 0;
-	/** @var string */
-	public $platformChatId = "";
 	/** @var Skin */
 	public $skin;
 	/** @var string */
@@ -51,15 +45,12 @@ class PlayerListEntry{
 
 		return $entry;
 	}
-	
-              public static function createAdditionEntry(UUID $uuid, int $entityUniqueId, string $username, string $thirdPartyName, int $platform, Skin $skin, string $xboxUserId = "") : PlayerListEntry{
 
+	public static function createAdditionEntry(UUID $uuid, int $entityUniqueId, string $username, Skin $skin, string $xboxUserId = "") : PlayerListEntry{
 		$entry = new PlayerListEntry();
 		$entry->uuid = $uuid;
 		$entry->entityUniqueId = $entityUniqueId;
 		$entry->username = $username;
-		$entry->thirdPartyName = $thirdPartyName;
-		$entry->platform = $platform;
 		$entry->skin = $skin;
 		$entry->xboxUserId = $xboxUserId;
 

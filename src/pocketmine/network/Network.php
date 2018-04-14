@@ -69,6 +69,7 @@ use pocketmine\network\mcpe\protocol\FullChunkDataPacket;
 use pocketmine\network\mcpe\protocol\GameRulesChangedPacket;
 use pocketmine\network\mcpe\protocol\GuiDataPickItemPacket;
 use pocketmine\network\mcpe\protocol\HurtArmorPacket;
+use pocketmine\network\mcpe\protocol\LabTablePacket;
 use pocketmine\network\mcpe\protocol\MobEffectPacket;
 use pocketmine\network\mcpe\protocol\ModalFormRequestPacket;
 use pocketmine\network\mcpe\protocol\ModalFormResponsePacket;
@@ -78,10 +79,13 @@ use pocketmine\network\mcpe\protocol\PingPacket;
 use pocketmine\network\mcpe\protocol\PlayerHotbarPacket;
 use pocketmine\network\mcpe\protocol\PlayerSkinPacket;
 use pocketmine\network\mcpe\protocol\PurchaseReceiptPacket;
+use pocketmine\network\mcpe\protocol\RemoveObjectivePacket;
 use pocketmine\network\mcpe\protocol\ServerSettingsRequestPacket;
 use pocketmine\network\mcpe\protocol\ServerSettingsResponsePacket;
 use pocketmine\network\mcpe\protocol\SetDefaultGameTypePacket;
+use pocketmine\network\mcpe\protocol\SetDisplayObjectivePacket;
 use pocketmine\network\mcpe\protocol\SetLastHurtByPacket;
+use pocketmine\network\mcpe\protocol\SetScorePacket;
 use pocketmine\network\mcpe\protocol\ShowProfilePacket;
 use pocketmine\network\mcpe\protocol\ShowStoreOfferPacket;
 use pocketmine\network\mcpe\protocol\SimpleEventPacket;
@@ -90,6 +94,7 @@ use pocketmine\network\mcpe\protocol\SubClientLoginPacket;
 use pocketmine\network\mcpe\protocol\UnknownPacket;
 use pocketmine\network\mcpe\protocol\UpdateAttributesPacket;
 use pocketmine\network\mcpe\protocol\UpdateEquipPacket;
+use pocketmine\network\mcpe\protocol\UpdateBlockSyncedPacket;
 use pocketmine\network\mcpe\protocol\WSConnectPacket;
 use pocketmine\network\mcpe\protocol\InteractPacket;
 use pocketmine\network\mcpe\protocol\InventoryContentPacket;
@@ -339,6 +344,16 @@ class Network {
 			$interface->unblockAddress($address);
 		}
 	}
+	public function handleRemoveObjective(RemoveObjectivePacket $packet) : bool{
+		return false;	}
+	public function handleSetDisplayObjective(SetDisplayObjectivePacket $packet) : bool{
+		return false;	}	
+public function handleSetScore(SetScorePacket $packet) : bool{
+		return false;	}
+	public function handleLabTable(LabTablePacket $packet) : bool{
+	return false;	}	
+public function handleUpdateBlockSynced(UpdateBlockSyncedPacket $packet) : bool{
+		return false;	}
 
     /**
      *
@@ -348,6 +363,11 @@ class Network {
 
         static::registerPacket(new LoginPacket());
         static::registerPacket(new PlayStatusPacket());
+       static::registerPacket(new LabTablePacket());
+       static::registerPacket(new RemoveObjectivePacket());
+       static::registerPacket(new SetDisplayObjectivePacket());
+       static::registerPacket(new SetScorePacket());
+       static::registerPacket(new UpdateBlockSyncedPacket());
         static::registerPacket(new ServerToClientHandshakePacket());
         static::registerPacket(new ClientToServerHandshakePacket());
         static::registerPacket(new DisconnectPacket());
