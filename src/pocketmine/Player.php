@@ -4066,12 +4066,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
      * @param ServerSettingsRequestPacket $packet
      * @return bool
      */
-    public function handleServerSettingsRequest(ServerSettingsRequestPacket $packet) : bool{
-        if ($this->server->getAdvancedProperty("server.show-turanic", true)) {
-            $this->sendServerSettings($this->getDefaultServerSettings());
-        }
-        return true;
-    }
 
     public function handleSpawnExperienceOrb(SpawnExperienceOrbPacket $packet): bool{
         return false;
@@ -4221,13 +4215,6 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->modalForms[$id] = $form;
 	}
 
-	public function getDefaultServerSettings() : Form{
-		return $this->defaultServerSettings;
-	}
-
-	public function setDefaultServerSettings(Form $form){
-		$this->defaultServerSettings = $form;
-	}
 
 	public function getForm(int $id){
 		return $this->modalForms[$id] ?? null;
