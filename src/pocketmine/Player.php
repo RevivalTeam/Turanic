@@ -719,17 +719,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$this->creationTime = microtime(true);
 
 		$this->allowMovementCheats = (bool)$this->server->getProperty("player.anti-cheat.allow-movement-cheats", false);
+        }
 
-		/**
-		 * A CustomForm about Turanic
-		 * You can edit this with Player::setDefaultServerSettings function
-		 */
-		$form = new CustomForm("Turanic Server Software");
-		$form->setIconUrl("https://avatars2.githubusercontent.com/u/31800317?s=400&v=4"); // turanic logo
-		$form->addElement(new Label("Turanic is a MC:BE Server Software\nYou can download it from github: https://github.com/TuranicTeam/Turanic"));
 
-		$this->defaultServerSettings = $form;
-	}
 
     /**
      * @return bool
