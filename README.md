@@ -1,6 +1,6 @@
 [![image](https://i.hizliresim.com/1GAdvN.png)](https://github.com/TuranicTeam/Turanic)
 
-Fast server software for Minecraft: Bedrock/PE Edition and W10 Edition - v1.2.x.
+Fast server software for Minecraft: Bedrock/PE Edition and W10 Edition - v1.4.x.
 Turanic is a fork of GenisysPro
 
 | Phar | Twitter | Travis CI | Discord | Hit |
@@ -12,7 +12,7 @@ Example servers running Turanic
 --------------------
 - **play.oyungg.net**
 -------------
-## Known Bugs in 1.2:
+## Known Bugs in 1.4:
 - Movement Bug (players not affect from gravity in some server devices)
 
 # Finished & Planned Features
