@@ -27,9 +27,9 @@ interface ProtocolInfo {
 	/**
 	 * Actual Minecraft: PE protocol version
 	 */
-	const CURRENT_PROTOCOL = 223;
-	const ACCEPTED_PROTOCOLS = [223, 240];
-	const MINECRAFT_VERSION_NETWORK = "1.2.13";
+	const CURRENT_PROTOCOL = 261;
+	const ACCEPTED_PROTOCOLS = [261, 270, 271];
+	const MINECRAFT_VERSION_NETWORK = "1.4.0";
 
     const LOGIN_PACKET = 0x01;
     const PLAY_STATUS_PACKET = 0x02;
