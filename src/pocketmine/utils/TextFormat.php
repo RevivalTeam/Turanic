@@ -53,6 +53,42 @@ abstract class TextFormat {
 	const ITALIC = TextFormat::ESCAPE . "o";
 	const RESET = TextFormat::ESCAPE . "r";
 
+	public const CharWidths = [
+		' ' => 4,
+		'!' => 2,
+		'"' => 5,
+		'\'' => 3,
+		'(' => 5,
+		')' => 5,
+		'*' => 5,
+		',' => 2,
+		'.' => 2,
+		':' => 2,
+		';' => 2,
+		'<' => 5,
+		'>' => 5,
+		'@' => 7,
+		'I' => 4,
+		'[' => 4,
+		']' => 4,
+		'f' => 5,
+		'i' => 2,
+		'k' => 5,
+		'l' => 3,
+		't' => 4,
+		'' => 5,
+		'|' => 2,
+		'~' => 7,
+		'█' => 9,
+		'░' => 8,
+		'▒' => 9,
+		'▓' => 9,
+		'▌' => 5,
+		'─' => 9
+		//'-' => 9,
+	];
+
+
 	/**
 	 * Splits the string by Format tokens
 	 *
@@ -63,6 +99,55 @@ abstract class TextFormat {
 	public static function tokenize($string){
 		return preg_split("/(" . TextFormat::ESCAPE . "[0123456789abcdefklmnor])/", $string, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 	}
+
+	public static function centerLine(string $input) : string{
+		return self::center($input, 180);
+	}
+
+	public static function center(string $input, int $maxLength = 0, bool $addRightPadding = false) : string{
+		$lines = explode("\n", trim($input));
+
+		$sortedLines = $lines;
+		usort($sortedLines, function(string $a, string $b){
+			return self::getPixelLength($b) <=> self::getPixelLength($a);
+		});
+
+		$longest = $sortedLines[0];
+		if($maxLength === 0){
+			$maxLength = self::getPixelLength($longest);
+		}
+
+		$result = "";
+
+		$spaceWidth = self::getCharWidth(' ');
+
+		foreach($lines as $sortedLine){
+			$len = max($maxLength - self::getPixelLength($sortedLine), 0);
+			$padding = (int) round($len / (2 * $spaceWidth));
+			$paddingRight = (int) floor($len / (2 * $spaceWidth));
+			$result .= str_pad(' ', $padding) . $sortedLine . self::RESET . ($addRightPadding ? str_pad(' ', $paddingRight) : "") . "\n";
+		}
+
+		$result = rtrim($result, "\n");
+
+		return $result;
+	}
+
+	private static function getCharWidth(string $c) : int{
+		return self::CharWidths[$c] ?? 6;
+	}
+
+	public static function getPixelLength(string $line) : int{
+		$length = 0;
+		foreach(str_split(self::clean($line)) as $c){
+			$length += self::getCharWidth($c);
+		}
+
+		// +1 for each bold character
+		$length += substr_count($line, self::BOLD);
+		return $length;
+	}
+
 
     /**
      * It makes every letter of this sentence mixed in color.
