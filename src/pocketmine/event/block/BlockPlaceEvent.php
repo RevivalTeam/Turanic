@@ -1,23 +1,26 @@
 <?php
 
 /*
- *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *               _ _
+ *         /\   | | |
+ *        /  \  | | |_ __ _ _   _
+ *       / /\ \ | | __/ _` | | | |
+ *      / ____ \| | || (_| | |_| |
+ *     /_/    \_|_|\__\__,_|\__, |
+ *                           __/ |
+ *                          |___/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author PocketMine Team
- * @link   http://www.pocketmine.net/
- *
+ * @author TuranicTeam
+ * @link https://github.com/TuranicTeam/Altay
  *
  */
+
+declare(strict_types=1);
 
 namespace pocketmine\event\block;
 
@@ -29,30 +32,20 @@ use pocketmine\Player;
 /**
  * Called when a player places a block
  */
-class BlockPlaceEvent extends BlockEvent implements Cancellable {
-	public static $handlerList = null;
-
-	/** @var \pocketmine\Player */
+class BlockPlaceEvent extends BlockEvent implements Cancellable{
+	/** @var Player */
 	protected $player;
 
-	/** @var \pocketmine\item\Item */
+	/** @var Item */
 	protected $item;
 
-
+	/** @var Block */
 	protected $blockReplace;
+	/** @var Block */
 	protected $blockAgainst;
 
-	/**
-	 * BlockPlaceEvent constructor.
-	 *
-	 * @param Player $player
-	 * @param Block  $blockPlace
-	 * @param Block  $blockReplace
-	 * @param Block  $blockAgainst
-	 * @param Item   $item
-	 */
 	public function __construct(Player $player, Block $blockPlace, Block $blockReplace, Block $blockAgainst, Item $item){
-		$this->block = $blockPlace;
+		parent::__construct($blockPlace);
 		$this->blockReplace = $blockReplace;
 		$this->blockAgainst = $blockAgainst;
 		$this->item = $item;
@@ -60,32 +53,32 @@ class BlockPlaceEvent extends BlockEvent implements Cancellable {
 	}
 
 	/**
+	 * Returns the player who is placing the block.
 	 * @return Player
 	 */
-	public function getPlayer(){
+	public function getPlayer() : Player{
 		return $this->player;
 	}
 
 	/**
 	 * Gets the item in hand
-	 *
-	 * @return mixed
+	 * @return Item
 	 */
-	public function getItem(){
+	public function getItem() : Item{
 		return $this->item;
 	}
 
 	/**
 	 * @return Block
 	 */
-	public function getBlockReplaced(){
+	public function getBlockReplaced() : Block{
 		return $this->blockReplace;
 	}
 
 	/**
 	 * @return Block
 	 */
-	public function getBlockAgainst(){
+	public function getBlockAgainst() : Block{
 		return $this->blockAgainst;
 	}
 }
