@@ -1,14 +1,14 @@
 <?php
 
 /*
- *
- *    _______                    _
- *   |__   __|                  (_)
- *      | |_   _ _ __ __ _ _ __  _  ___
- *      | | | | | '__/ _` | '_ \| |/ __|
- *      | | |_| | | | (_| | | | | | (__
- *      |_|\__,_|_|  \__,_|_| |_|_|\___|
- *
+ *               _ _
+ *         /\   | | |
+ *        /  \  | | |_ __ _ _   _
+ *       / /\ \ | | __/ _` | | | |
+ *      / ____ \| | || (_| | |_| |
+ *     /_/    \_|_|\__\__,_|\__, |
+ *                           __/ |
+ *                          |___/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,7 +16,7 @@
  * (at your option) any later version.
  *
  * @author TuranicTeam
- * @link https://github.com/TuranicTeam/Turanic
+ * @link https://github.com/TuranicTeam/Altay
  *
  */
 
@@ -29,90 +29,118 @@ use pocketmine\event\Cancellable;
 use pocketmine\item\Item;
 use pocketmine\Player;
 
-class BlockBreakEvent extends BlockEvent implements Cancellable {
+/**
+ * Called when a player destroys a block somewhere in the world.
+ */
+class BlockBreakEvent extends BlockEvent implements Cancellable{
     public static $handlerList = null;
 
-    /** @var Player */
-    protected $player;
+	/** @var Player */
+	protected $player;
 
-    /** @var Item */
-    protected $item;
+	/** @var Item */
+	protected $item;
 
-    /** @var bool */
-    protected $instaBreak = false;
-    /** @var Item[] */
-    protected $blockDrops = [];
+	/** @var bool */
+	protected $instaBreak = false;
+	/** @var Item[] */
+	protected $blockDrops = [];
+	/** @var int */
+	protected $xpDrops;
 
-    /**
-     * @param Player $player
-     * @param Block  $block
-     * @param Item   $item
-     * @param bool   $instaBreak
-     * @param Item[] $drops
-     */
-    public function __construct(Player $player, Block $block, Item $item, bool $instaBreak = false, array $drops){
-        parent::__construct($block);
-        $this->item = $item;
-        $this->player = $player;
+	/**
+	 * @param Player $player
+	 * @param Block  $block
+	 * @param Item   $item
+	 * @param bool   $instaBreak
+	 * @param Item[] $drops
+	 * @param int    $xpDrops
+	 */
+	public function __construct(Player $player, Block $block, Item $item, bool $instaBreak = false, array $drops, int $xpDrops = 0){
+		parent::__construct($block);
+		$this->item = $item;
+		$this->player = $player;
 
-        $this->instaBreak = $instaBreak;
-        $this->setDrops($drops);
-    }
+		$this->instaBreak = $instaBreak;
+		$this->setDrops($drops);
+		$this->xpDrops = $xpDrops;
+	}
 
-    /**
-     * Returns the player who is destroying the block.
-     * @return Player
-     */
-    public function getPlayer() : Player{
-        return $this->player;
-    }
+	/**
+	 * Returns the player who is destroying the block.
+	 * @return Player
+	 */
+	public function getPlayer() : Player{
+		return $this->player;
+	}
 
-    /**
-     * Returns the item used to destroy the block.
-     * @return Item
-     */
-    public function getItem() : Item{
-        return $this->item;
-    }
+	/**
+	 * Returns the item used to destroy the block.
+	 * @return Item
+	 */
+	public function getItem() : Item{
+		return $this->item;
+	}
 
-    /**
-     * Returns whether the block may be broken in less than the amount of time calculated. This is usually true for
-     * creative players.
-     *
-     * @return bool
-     */
-    public function getInstaBreak() : bool{
-        return $this->instaBreak;
-    }
+	/**
+	 * Returns whether the block may be broken in less than the amount of time calculated. This is usually true for
+	 * creative players.
+	 *
+	 * @return bool
+	 */
+	public function getInstaBreak() : bool{
+		return $this->instaBreak;
+	}
 
-    /**
-     * @param bool $instaBreak
-     */
-    public function setInstaBreak(bool $instaBreak){
-        $this->instaBreak = $instaBreak;
-    }
+	/**
+	 * @param bool $instaBreak
+	 */
+	public function setInstaBreak(bool $instaBreak){
+		$this->instaBreak = $instaBreak;
+	}
 
 
-    /**
-     * @return Item[]
-     */
-    public function getDrops() : array{
-        return $this->blockDrops;
-    }
+	/**
+	 * @return Item[]
+	 */
+	public function getDrops() : array{
+		return $this->blockDrops;
+	}
 
-    /**
-     * @param Item[] $drops
-     */
-    public function setDrops(array $drops){
-        $this->setDropsVariadic(...$drops);
-    }
+	/**
+	 * @param Item[] $drops
+	 */
+	public function setDrops(array $drops){
+		$this->setDropsVariadic(...$drops);
+	}
 
-    /**
-     * Variadic hack for easy array member type enforcement.
-     *
-     * @param Item[] ...$drops
-     */
-    public function setDropsVariadic(Item ...$drops){
-        $this->blockDrops = $drops;
-    }
+	/**
+	 * Variadic hack for easy array member type enforcement.
+	 *
+	 * @param Item ...$drops
+	 */
+	public function setDropsVariadic(Item ...$drops){
+		$this->blockDrops = $drops;
+	}
+
+	/**
+	 * Returns how much XP will be dropped by breaking this block.
+	 *
+	 * @return int
+	 */
+	public function getXpDropAmount() : int{
+		return $this->xpDrops;
+	}
+
+	/**
+	 * Sets how much XP will be dropped by breaking this block.
+	 *
+	 * @param int $amount
+	 */
+	public function setXpDrops(int $amount) : void{
+		if($amount < 0){
+			throw new \InvalidArgumentException("Amount must be at least zero");
+		}
+		$this->xpDrops = $amount;
+	}
 }
